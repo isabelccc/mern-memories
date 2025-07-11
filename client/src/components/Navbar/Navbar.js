@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Typography, Toolbar, Avatar, Button } from '@material-ui/core';
+import { AppBar, Typography, Toolbar, Avatar, Button, Box } from '@material-ui/core';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
@@ -8,6 +8,7 @@ import memoriesLogo from '../../images/memoriesLogo.png';
 import memoriesText from '../../images/memoriesText.png';
 import * as actionType from '../../constants/actionTypes';
 import useStyles from './styles';
+import { getGravatarUrl } from '../../utils/gravatar';
 
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
@@ -44,11 +45,17 @@ const Navbar = () => {
       </Link>
       <Toolbar className={classes.toolbar}>
         {user?.result ? (
-          <div className={classes.profile}>
-            <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
-            <Typography className={classes.userName} variant="h6">{user?.result.name}</Typography>
+          <Box display="flex" alignItems="center">
+            <Link to={`/profile/${user.result._id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+              <img
+                src={getGravatarUrl(user.result.email, 40)}
+                alt={user.result.name}
+                style={{ borderRadius: '50%', width: 40, height: 40, marginRight: 8 }}
+              />
+              <Typography variant="h6">{user.result.name}</Typography>
+            </Link>
             <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
-          </div>
+          </Box>
         ) : (
           <Button component={Link} to="/auth" variant="contained" color="primary">Sign In</Button>
         )}
