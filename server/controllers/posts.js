@@ -114,11 +114,44 @@ export const likePost = async (req, res) => {
 
 export const commentPost = async (req, res) => {
     const { id } = req.params;
-    const { value } = req.body;
+    const { text } = req.body;
+    if (!req.userId) return res.status(401).json({ message: 'Unauthenticated' });
     const post = await PostMessage.findById(id);
-    post.comments.push(value);
+    const userName = req.userName || req.user?.name || req.body.authorName || 'Unknown';
+    const comment = {
+        text: filter.clean(text),
+        authorId: req.userId,
+        authorName: userName,
+        createdAt: new Date(),
+    };
+    post.comments.push(comment);
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
     res.json(updatedPost);
+};
+
+export const editComment = async (req, res) => {
+    const { id, commentId } = req.params;
+    const { text } = req.body;
+    if (!req.userId) return res.status(401).json({ message: 'Unauthenticated' });
+    const post = await PostMessage.findById(id);
+    const comment = post.comments.id(commentId);
+    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+    if (comment.authorId !== req.userId) return res.status(403).json({ message: 'Not allowed' });
+    comment.text = filter.clean(text);
+    await post.save();
+    res.json(post);
+};
+
+export const deleteComment = async (req, res) => {
+    const { id, commentId } = req.params;
+    if (!req.userId) return res.status(401).json({ message: 'Unauthenticated' });
+    const post = await PostMessage.findById(id);
+    const comment = post.comments.id(commentId);
+    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+    if (comment.authorId !== req.userId) return res.status(403).json({ message: 'Not allowed' });
+    comment.remove();
+    await post.save();
+    res.json(post);
 };
 
 export default router;
