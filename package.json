@@ -1,0 +1,29 @@
+{
+  "name": "mern-memories-project",
+  "version": "1.0.0",
+  "description": "A MERN stack memories application with authentication, CRUD operations, and real-time features",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "test": "cd server && npm test"
+  },
+  "keywords": [
+    "mern",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "memories",
+    "social-media"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+} 
