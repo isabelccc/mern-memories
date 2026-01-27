@@ -16,6 +16,7 @@ const initialState = { firstName: '', lastName: '', email: '', password: '', con
 const SignUp = () => {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
@@ -27,15 +28,40 @@ const SignUp = () => {
     setForm(initialState);
     setIsSignup((prevIsSignup) => !prevIsSignup);
     setShowPassword(false);
+    setError('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError('');
 
     if (isSignup) {
-      dispatch(signup(form, history));
+      // Validate password confirmation
+      if (form.password !== form.confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+      // Validate password length
+      if (form.password.length < 6) {
+        setError('Password must be at least 6 characters');
+        return;
+      }
+      // Validate required fields
+      if (!form.firstName || !form.lastName || !form.email || !form.password) {
+        setError('Please fill in all fields');
+        return;
+      }
+    }
+    // Validate sign in fields
+    if (!isSignup && (!form.email || !form.password)) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    if (isSignup) {
+      dispatch(signup(form, history, setError));
     } else {
-      dispatch(signin(form, history));
+      dispatch(signin(form, history, setError));
     }
   };
 
@@ -47,12 +73,12 @@ const SignUp = () => {
       dispatch({ type: AUTH, data: { result, token } });
 
       history.push('/');
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error('Google sign in error:', err);
     }
   };
 
-  const googleError = () => console.log('Google Sign In was unsuccessful. Try again later');
+  const googleError = () => console.warn('Google Sign In was unsuccessful. Try again later');
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -63,6 +89,11 @@ const SignUp = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
+        {error && (
+          <Typography variant="body2" color="error" style={{ marginTop: 10, textAlign: 'center' }}>
+            {error}
+          </Typography>
+        )}
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             { isSignup && (

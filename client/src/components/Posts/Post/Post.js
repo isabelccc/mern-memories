@@ -44,7 +44,7 @@ const Post = ({ post, setCurrentId }) => {
     return <><ThumbUpAltOutlined fontSize="small" />&nbsp;Like</>;
   };
 
-  const openPost = (e) => {
+  const openPost = () => {
     // dispatch(getPost(post._id, history));
 
     history.push(`/posts/${post._id}`);

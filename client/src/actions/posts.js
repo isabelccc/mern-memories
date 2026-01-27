@@ -9,7 +9,7 @@ export const getPost = (id) => async (dispatch) => {
 
     dispatch({ type: FETCH_POST, payload: { post: data } });
   } catch (error) {
-    console.log(error);
+    console.error('Get post error:', error);
   }
 };
 
@@ -21,7 +21,7 @@ export const getPosts = (page) => async (dispatch) => {
     dispatch({ type: FETCH_ALL, payload: { data, currentPage, numberOfPages } });
     dispatch({ type: END_LOADING });
   } catch (error) {
-    console.log(error);
+    console.error('Get posts error:', error);
   }
 };
 
@@ -33,7 +33,7 @@ export const getPostsByCreator = (name) => async (dispatch) => {
     dispatch({ type: FETCH_BY_CREATOR, payload: { data } });
     dispatch({ type: END_LOADING });
   } catch (error) {
-    console.log(error);
+    console.error('Get posts by creator error:', error);
   }
 };
 
@@ -45,7 +45,7 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
     dispatch({ type: FETCH_BY_SEARCH, payload: { data } });
     dispatch({ type: END_LOADING });
   } catch (error) {
-    console.log(error);
+    console.error('Get posts by search error:', error);
   }
 };
 
@@ -58,7 +58,7 @@ export const createPost = (post, history) => async (dispatch) => {
 
     history.push(`/posts/${data._id}`);
   } catch (error) {
-    console.log(error);
+    console.error('Create post error:', error);
   }
 };
 
@@ -68,7 +68,7 @@ export const updatePost = (id, post) => async (dispatch) => {
 
     dispatch({ type: UPDATE, payload: data });
   } catch (error) {
-    console.log(error);
+    console.error('Update post error:', error);
   }
 };
 
@@ -80,7 +80,7 @@ export const likePost = (id) => async (dispatch) => {
 
     dispatch({ type: LIKE, payload: data });
   } catch (error) {
-    console.log(error);
+    console.error('Like post error:', error);
   }
 };
 
@@ -92,16 +92,17 @@ export const commentPost = (value, id) => async (dispatch) => {
 
     return data.comments;
   } catch (error) {
-    console.log(error);
+    console.error('Comment post error:', error);
+    return null;
   }
 };
 
 export const deletePost = (id) => async (dispatch) => {
   try {
-    await await api.deletePost(id);
+    await api.deletePost(id);
 
     dispatch({ type: DELETE, payload: id });
   } catch (error) {
-    console.log(error);
+    console.error('Delete post error:', error);
   }
 };

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Avatar, Button, Box, Grid, Card, CardContent } from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPostsByCreator } from '../../actions/posts';
 import { getGravatarUrl } from '../../utils/gravatar';
 
 const Profile = () => {
-  const { id } = useParams();
-  const history = useHistory();
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const { posts } = useSelector((state) => state.posts);
@@ -31,8 +28,8 @@ const Profile = () => {
           <Typography variant="h4">{user.name}</Typography>
           <Typography color="textSecondary">{user.email}</Typography>
           {/* Add more user info here if available */}
-          <Button variant="outlined" color="primary" style={{ marginTop: 8 }} onClick={() => alert('Edit profile coming soon!')}>
-            Edit Profile
+          <Button variant="outlined" color="primary" style={{ marginTop: 8 }} onClick={() => {}} disabled>
+            Edit Profile (Coming Soon)
           </Button>
         </Box>
       </Box>
@@ -54,4 +51,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;

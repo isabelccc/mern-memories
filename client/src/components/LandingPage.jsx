@@ -2,11 +2,6 @@ import React from 'react';
 import { Container, Typography, Button, Box } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import memoriesLogo from '../images/memoriesLogo.png';
-import gravatarUrl from 'gravatar';
-
-export function getGravatarUrl(email, size = 40) {
-  return gravatarUrl.url(email || '', { s: size.toString(), d: 'identicon' });
-}
 
 const LandingPage = () => {
   const history = useHistory();
@@ -43,4 +38,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage; 
+export default LandingPage;

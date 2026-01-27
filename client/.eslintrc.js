@@ -17,8 +17,12 @@ module.exports = {
     },
     ecmaVersion: 2018,
     sourceType: 'module',
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-react'],
+    },
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   plugins: [
     'react',
   ],
@@ -28,6 +32,8 @@ module.exports = {
     'linebreak-style': 0,
     'react/state-in-constructor': 0,
     'import/prefer-default-export': 0,
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-alert': 'warn',
     'max-len': [
       2,
       500,
