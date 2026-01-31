@@ -1,37 +1,8 @@
 import { Dispatch } from 'redux';
+import { AxiosError } from 'axios';
 import { AUTH } from '../constants/actionTypes';
 import * as api from '../api/index';
-
-
-
-interface SigninFormData {
-  email: string;
-  password: string;
-}
-
-interface SignupFormData {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  confirmPassword?: string;
-}
-
-type Router = {
-  push: (path: string) => void;
-};
-
-interface AxiosError {
-  message?: string;
-  response?: {
-    data?: {
-      message?: string;
-    };
-    status?: number;
-    statusText?: string;
-  };
-  code?: string;
-}
+import { SigninFormData, SignupFormData, Router } from '../types';
 
 export const signin = (
   formData: SigninFormData,
@@ -45,7 +16,7 @@ export const signin = (
 
     router.push('/');
   } catch (error: unknown) {
-    const err = error as AxiosError;
+    const err = error as AxiosError<{ message?: string }>;
     const errorMessage = err?.response?.data?.message || 'Sign in failed. Please try again.';
     if (setError) setError(errorMessage);
     console.error('Sign in error:', err);
@@ -64,7 +35,7 @@ export const signup = (
 
     router.push('/');
   } catch (error: unknown) {
-    const err = error as AxiosError;
+    const err = error as AxiosError<{ message?: string }>;
     console.error('Sign up error details:', {
       message: err?.message,
       response: err?.response?.data,
