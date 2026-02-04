@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Seed configuration
+// Run: npm run prisma:seed
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  googleId  String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts Post[] @relation("UserPosts")
+}
+
+model Post {
+  id           String    @id @default(cuid())
+  title        String
+  message      String
+  name         String
+  creator      String
+  tags         String[]
+  selectedFile String?
+  likes        String[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  creatorUser User?     @relation("UserPosts", fields: [creator], references: [id], onDelete: SetNull)
+  comments    Comment[]
+
+  @@index([creator])
+  @@index([name])
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  text       String
+  authorId   String
+  authorName String
+  postId     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  replies Reply[]
+
+  @@index([postId])
+  @@index([authorId])
+}
+
+model Reply {
+  id         String   @id @default(cuid())
+  text       String
+  authorId   String
+  authorName String
+  commentId  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([commentId])
+  @@index([authorId])
+}
