@@ -23,7 +23,11 @@ const Profile = () => {
   return (
     <Container maxWidth="md" style={{ marginTop: 32 }}>
       <Box display="flex" alignItems="center" mb={4}>
-        <Avatar src={getGravatarUrl(user.email, 80)} alt={user.name} style={{ width: 80, height: 80, marginRight: 24 }} />
+        <Avatar
+          src={getGravatarUrl(user.email, 80)}
+          alt={user.name}
+          style={{ width: 80, height: 80, marginRight: 24 }}
+        />
         <Box>
           <Typography variant="h4">{user.name}</Typography>
           <Typography color="textSecondary">{user.email}</Typography>

@@ -12,7 +12,7 @@ const CreatorOrTag: React.FC = () => {
   const { name } = useParams<RouteParams>();
   const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>();
   const { posts, isLoading } = useSelector((state: RootState) => state.posts);
-  const [currentId, setCurrentId] = useState<string | null>(null);
+  const [, setCurrentId] = useState<string | null>(null);
 
   const location = useLocation();
 

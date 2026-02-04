@@ -4,8 +4,8 @@
   "description": "A MERN stack memories application with authentication, CRUD operations, and real-time features",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "server": "cd server && npm start",
+    "start": "cd server && npm run dev",
+    "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "install-all": "npm install && cd server && npm install && cd ../client && npm install --legacy-peer-deps",
@@ -24,6 +24,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "@types/bad-words": "^3.0.3",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/react-router-dom": "^5.3.3",
+    "concurrently": "^7.6.0",
+    "prisma": "^7.3.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.3.0"
   }
-} 
+}

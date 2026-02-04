@@ -1,0 +1,47 @@
+global:
+  scrape_interval: 15s      # How often to scrape metrics from targets
+  evaluation_interval: 15s # How often to evaluate alert rules
+  external_labels:
+    monitor: 'mern-memories-monitor'
+    environment: 'production'
+
+# Alertmanager configuration (optional - uncomment if using Alertmanager)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']
+
+# Load alert rules
+rule_files:
+  - "alert_rules.yml"
+
+# Scrape configurations - where to collect metrics from
+scrape_configs:
+  # Scrape Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Scrape your Node.js application
+  - job_name: 'mern-memories-api'
+    static_configs:
+      # Use the Docker service name if on same network, or host.docker.internal if on host
+      # Option 1: If API is in Docker (recommended) - use service name
+      - targets: ['mern-memories-api:5001'] # Docker service name
+        labels:
+          service: 'mern-memories-api'
+          environment: 'production'
+      # Option 2: If API is running on host machine (not in Docker)
+      # - targets: ['host.docker.internal:5001']
+    metrics_path: '/metrics' # The endpoint we created
+    scrape_interval: 15s
+    scrape_timeout: 10s
+
+  # Optional: Scrape Node Exporter for system metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'node-exporter'

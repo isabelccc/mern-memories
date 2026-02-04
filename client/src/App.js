@@ -9,6 +9,7 @@ import Auth from './components/Auth/Auth';
 import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import LandingPage from './components/LandingPage';
 import Profile from './components/Profile/Profile';
+import BackToTop from './components/BackToTop/BackToTop';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
           <Redirect to="/posts" />
         </Switch>
+        <BackToTop threshold={300} />
       </Container>
     </BrowserRouter>
   );

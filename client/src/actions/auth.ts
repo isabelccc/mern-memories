@@ -7,7 +7,7 @@ import { SigninFormData, SignupFormData, Router } from '../types';
 export const signin = (
   formData: SigninFormData,
   router: Router,
-  setError?: (msg: string) => void
+  setError?: (msg: string) => void,
 ) => async (dispatch: Dispatch) => {
   try {
     const { data } = await api.signIn(formData);
@@ -26,7 +26,7 @@ export const signin = (
 export const signup = (
   formData: SignupFormData,
   router: Router,
-  setError?: (msg: string) => void
+  setError?: (msg: string) => void,
 ) => async (dispatch: Dispatch) => {
   try {
     const { data } = await api.signUp(formData);

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Filter from 'bad-words';
-import prisma from '../prisma/client';
+import prisma from '../prisma/client.js';
 import { AuthRequest } from '../middleware/auth';
 
 // Profanity filter initialization

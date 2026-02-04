@@ -3,7 +3,7 @@ import { Container, Typography, Button, Box } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import memoriesLogo from '../images/memoriesLogo.png';
 
-const LandingPage = () => {
+const LandingPage: React.FC = () => {
   const history = useHistory();
 
   return (
@@ -25,11 +25,22 @@ const LandingPage = () => {
         <Typography variant="h6" color="textSecondary" paragraph>
           A modern social media app to share, like, and comment on your favorite moments. Built with the MERN stack.
         </Typography>
-        <Box mt={4} display="flex" justifyContent="center" gap={2}>
-          <Button variant="contained" color="primary" size="large" onClick={() => history.push('/posts')} style={{ marginRight: 16 }}>
+        <Box mt={4} display="flex" justifyContent="center">
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => history.push('/posts')}
+            style={{ marginRight: 16 }}
+          >
             View Memories
           </Button>
-          <Button variant="outlined" color="primary" size="large" onClick={() => history.push('/auth')}>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="large"
+            onClick={() => history.push('/auth')}
+          >
             Sign Up
           </Button>
         </Box>

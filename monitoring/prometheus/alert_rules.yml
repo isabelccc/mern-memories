@@ -1,0 +1,99 @@
+groups:
+  - name: mern_memories_alerts
+    interval: 30s
+    rules:
+      # Alert on high error rate (>5% of requests)
+      - alert: HighErrorRate
+        expr: |
+          rate(http_request_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: mern-memories-api
+        annotations:
+          summary: "High error rate detected in MERN Memories API"
+          description: "Error rate is {{ $value | humanize }} errors/sec (threshold: 0.05)"
+
+      # Alert on slow response time (p95 > 1 second)
+      - alert: SlowResponseTime
+        expr: |
+          histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+          service: mern-memories-api
+        annotations:
+          summary: "Slow response time detected"
+          description: "95th percentile response time is {{ $value | humanize }}s (threshold: 1s)"
+
+      # Alert on very slow response time (p95 > 5 seconds)
+      - alert: VerySlowResponseTime
+        expr: |
+          histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 5
+        for: 2m
+        labels:
+          severity: critical
+          service: mern-memories-api
+        annotations:
+          summary: "Very slow response time detected"
+          description: "95th percentile response time is {{ $value | humanize }}s (threshold: 5s)"
+
+      # Alert on high memory usage (>90%)
+      - alert: HighMemoryUsage
+        expr: |
+          (nodejs_heap_size_used_bytes / nodejs_heap_size_total_bytes) > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          service: mern-memories-api
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value | humanizePercentage }} (threshold: 90%)"
+
+      # Alert on high CPU usage
+      - alert: HighCPUUsage
+        expr: |
+          rate(process_cpu_user_seconds_total[5m]) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: mern-memories-api
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value | humanize }}% (threshold: 80%)"
+
+      # Alert on database connection issues
+      - alert: DatabaseConnectionIssues
+        expr: |
+          rate(database_query_duration_seconds{operation="connect"}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          service: mern-memories-api
+        annotations:
+          summary: "Database connection issues detected"
+          description: "Database connection errors detected"
+
+      # Alert on no metrics being scraped (service might be down)
+      - alert: ServiceDown
+        expr: |
+          up{job="mern-memories-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: mern-memories-api
+        annotations:
+          summary: "MERN Memories API is down"
+          description: "The API service has been down for more than 1 minute"
+
+      # Alert on low request rate (unusual traffic drop)
+      - alert: LowRequestRate
+        expr: |
+          rate(http_requests_total[10m]) < 0.1
+        for: 10m
+        labels:
+          severity: info
+          service: mern-memories-api
+        annotations:
+          summary: "Unusually low request rate"
+          description: "Request rate is {{ $value | humanize }} req/sec (threshold: 0.1)"

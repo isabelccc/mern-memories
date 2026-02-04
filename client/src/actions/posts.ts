@@ -1,8 +1,7 @@
+import { Dispatch, AnyAction } from 'redux';
 import { START_LOADING, END_LOADING, FETCH_ALL, FETCH_POST, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE, COMMENT, FETCH_BY_CREATOR } from '../constants/actionTypes';
 import * as api from '../api';
-import { Dispatch, AnyAction } from 'redux';
 import { Post, SearchQuery, HistoryLike } from '../types';
-
 
 export const getPost = (id: string) => async (dispatch: Dispatch<AnyAction>): Promise<void> => {
   try {
@@ -57,7 +56,10 @@ export const getPostsBySearch = (searchQuery: SearchQuery) => async (dispatch: D
   }
 };
 
-export const createPost = (post: Partial<Post>, history: HistoryLike) => async (dispatch: Dispatch<AnyAction>): Promise<void> => {
+export const createPost = (
+  post: Partial<Post>,
+  history: HistoryLike,
+) => async (dispatch: Dispatch<AnyAction>): Promise<void> => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.createPost(post);
@@ -90,12 +92,13 @@ export const likePost = (id: string) => async (dispatch: Dispatch<AnyAction>): P
     dispatch({ type: LIKE, payload: data });
   } catch (error) {
     console.error('Like post error:', error);
+    throw error; // Re-throw so component can handle it
   }
 };
 
-export const commentPost = (value: string, id: string) => async (dispatch: Dispatch<AnyAction>): Promise<Post['comments'] | null> => {
+export const commentPost = (text: string, id: string) => async (dispatch: Dispatch<AnyAction>): Promise<Post['comments'] | null> => {
   try {
-    const { data } = await api.comment(value, id);
+    const { data } = await api.comment(text, id);
 
     dispatch({ type: COMMENT, payload: data });
 

@@ -3,13 +3,16 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
 
 import { getPosts } from '../actions/posts';
 import useStyles from './styles';
+import { RootState, PaginationProps } from '../types';
 
-const Paginate = ({ page }) => {
-  const { numberOfPages } = useSelector((state) => state.posts);
-  const dispatch = useDispatch();
+const Paginate: React.FC<PaginationProps> = ({ page }) => {
+  const { numberOfPages } = useSelector((state: RootState) => state.posts);
+  const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>();
 
   const classes = useStyles();
 
